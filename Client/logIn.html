@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>footcap - Login Page</title>
+    <style>
+        /* Reset default styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: whitesmoke;
+            position: relative;
+        }
+
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 120px;
+        }
+
+        @media (max-width:500px) {
+            .logo {
+                width: 80px;
+                top: 15px;
+                left: 15px;
+            }
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+        }
+
+        .login-box {
+            background: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .login-box h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            outline: none;
+            transition: border 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: #2575fc;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #2575fc;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #6a11cb;
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 15px;
+            color: #555;
+        }
+
+        .signup-link a {
+            color: #2575fc;
+            text-decoration: none;
+        }
+
+        .signup-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="#" class="logo"><img src="./images/logo.svg" alt="logo"></a>
+    <div class="login-container">
+        <div class="login-box">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+                <button type="submit">Login</button>
+                <p class="signup-link">Don't have an account? <a href="register.html">Sign Up</a></p>
+            </form>
+        </div>
+    </div>
+
+
+
+    <script>
+        const loginForm = document.getElementById('loginForm');
+
+        loginForm.addEventListener('submit', async function (event) {
+            event.preventDefault(); // Stop page from refreshing
+
+            //  Get values from inputs
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            try {
+                //  Send data to Backend API ( POST )
+                const response = await fetch('http://localhost:5000/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.token) {
+                    // If SUCCESS: Store the JWT token
+                    localStorage.setItem('token', data.token);
+
+                    // Optional: Storing username for the UI
+                    localStorage.setItem('username', username);
+                    if(username === "admin"){
+                        localStorage.setItem("role", "admin");
+                    } else {
+                        localStorage.setItem("role", "user");
+                    }
+                    
+                    alert("Login successful!");
+
+                    // Redirecting to Homepage ( index.html )
+                    window.location.href = "index.html";
+                } else {
+                    // If ERROR: Show message from server
+                    alert(data.message || "Invalid username or password.");
+                }
+            } catch (error) {
+                console.error("Login Error:", error);
+                alert("Could not connect to the server. Is your backend running?");
+            }
+        });
+    </script>
+
+</body>
+
+</html>

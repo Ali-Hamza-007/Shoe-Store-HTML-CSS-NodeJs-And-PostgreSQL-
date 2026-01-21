@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard - footcap</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/adminPage.css">
+</head>
+<body>
+
+    <header class="admin-header">
+        <h2>Admin Dashboard</h2>
+        <button id="logoutBtn" class="logout-btn">Logout</button>
+    </header>
+
+    <main class="admin-container">
+        <div class="admin-actions">
+            <button id="addProductBtn" class="primary-btn">➕ Add New Product</button>
+        </div>
+
+        <hr>
+
+        <h3>Current Inventory</h3>
+        <div id="productList" class="product-grid">
+            <p class="loading-text">Loading products...</p>
+        </div>
+    </main>
+
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Add New Product</h3>
+            <form id="productForm">
+                <div class="form-group">
+                    <label>Product Name</label>
+                    <input type="text" id="name" placeholder="e.g. Nike Air Max" required>
+                </div>
+                <div class="form-group">
+                    <label>Price ($)</label>
+                    <input type="number" id="price" step="0.01" placeholder="99.99" required>
+                </div>
+                <div class="form-group">
+                    <label>Image URL</label>
+                    <input type="text" id="image" placeholder="https://example.com/image.jpg" required>
+                </div>
+                <button type="submit" class="primary-btn">Save Product</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/adminPage.js"></script>
+</body>
+</html>
